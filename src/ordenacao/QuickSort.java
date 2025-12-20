@@ -4,7 +4,6 @@ import models.Estudante;
 
 public class QuickSort implements AlgoritmosOrdenacao.OrdenacaoAlgorithm {
 
-    // (pivot no final)
     @Override
     public void sort(int[] array) {
         if (array == null || array.length <= 1)
@@ -27,8 +26,6 @@ public class QuickSort implements AlgoritmosOrdenacao.OrdenacaoAlgorithm {
 
             int pi = partition(array, low, high);
 
-            // ordena a partição menor recursivamente e reutiliza loop para a maior
-            // (eliminação de cauda)
             if (pi - 1 - low < high - (pi + 1)) {
                 quickSortIntro(array, low, pi - 1, depthLimit - 1);
                 low = pi + 1;
@@ -77,12 +74,10 @@ public class QuickSort implements AlgoritmosOrdenacao.OrdenacaoAlgorithm {
         sort(array);
     }
 
-    // (Dual-Pivot QuickSort)
     public void sortJavaVersion(int[] array) {
         java.util.Arrays.sort(array);
     }
 
-    // mediana de três (melhor escolha do pivot)
     public void sortMedianaDeTres(int[] array) {
         quickSortMediana(array, 0, array.length - 1);
     }
@@ -105,10 +100,7 @@ public class QuickSort implements AlgoritmosOrdenacao.OrdenacaoAlgorithm {
         if (array[high] < array[mid])
             swap(array, mid, high);
 
-        // Coloca mediana no penúltimo elemento
-        // Coloca mediana como pivot na posição high
         swap(array, mid, high);
-        // Partição clássica com pivot em 'high'
         return partition(array, low, high);
     }
 
