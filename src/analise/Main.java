@@ -226,12 +226,17 @@ public class Main {
         System.out.println();
 
         String[] algoritmos = {
-                "Bubble Sort",
-                "Selection Sort",
-                "Insertion Sort",
-                "Merge Sort",
-                "Quick Sort",
-                "Counting Sort"
+                "BubbleSort (Versão do slide)",
+                "BubbleSort (Versão otimizada)",
+                "SelectionSort (Versão do slide)",
+                "SelectionSort (Versão estável)",
+                "InsertionSort",
+                "MergeSort (Versão clássica)",
+                "MergeSort (Versão TimSort)",
+                "QuickSort (Versão do slide)",
+                "QuickSort (Versão do slide + shuffle)",
+                "QuickSort (Versão do Java)",
+                "CountingSort"
         };
 
         System.out.println("RESULTADOS (tempo de execução em milissegundos):");
@@ -246,12 +251,18 @@ public class Main {
 
             try {
                 switch (algoritmo) {
-                    case "Bubble Sort" -> new BubbleSort().sort(array);
-                    case "Selection Sort" -> new SelectionSort().sort(array);
-                    case "Insertion Sort" -> new InsertionSort().sort(array);
-                    case "Merge Sort" -> new MergeSort().sort(array);
-                    case "Quick Sort" -> new QuickSort().sort(array);
-                    case "Counting Sort" -> new CountingSort().sort(array);
+                    case "BubbleSort (Versão do slide)" -> new BubbleSort().sort(array);
+                    case "BubbleSort (Versão otimizada)" -> new BubbleSort().sortOtimizado(array);
+                    case "SelectionSort (Versão do slide)" -> new SelectionSort().sort(array);
+                    case "SelectionSort (Versão estável)" -> new SelectionSort().sortEstavel(array);
+                    case "InsertionSort" -> new InsertionSort().sort(array);
+                    case "MergeSort (Versão clássica)" -> new MergeSort().sort(array);
+                    case "MergeSort (Versão TimSort)" -> new MergeSort().sortTimSort(array);
+                    case "QuickSort (Versão do slide)" -> new QuickSort().sort(array);
+                    case "QuickSort (Versão do slide + shuffle)" -> new QuickSort().sortComShuffle(array);
+                    case "QuickSort (Versão do Java)" -> new QuickSort().sortJavaVersion(array);
+                    case "CountingSort" -> new CountingSort().sort(array);
+                    default -> System.err.println("Algoritmo não reconhecido: " + algoritmo);
                 }
             } catch (Exception e) {
                 System.err.println("Erro ao executar " + algoritmo + ": " + e.getMessage());

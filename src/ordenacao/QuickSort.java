@@ -4,10 +4,51 @@ import models.Estudante;
 
 public class QuickSort implements AlgoritmosOrdenacao.OrdenacaoAlgorithm {
 
-    //(pivot no final)
+    // (pivot no final)
     @Override
     public void sort(int[] array) {
-        quickSortSlide(array, 0, array.length - 1);
+        if (array == null || array.length <= 1)
+            return;
+        int maxDepth = (int) (2 * Math.floor(Math.log(array.length) / Math.log(2)));
+        quickSortIntro(array, 0, array.length - 1, maxDepth);
+    }
+
+    private void quickSortIntro(int[] array, int low, int high, int depthLimit) {
+        while (low < high) {
+            int size = high - low + 1;
+            if (size <= 16) { // cutoff para insertion sort
+                insertionSortRange(array, low, high);
+                break;
+            }
+            if (depthLimit == 0) { // fallback para evitar stackoverflow (heapsort/Arrays.sort)
+                java.util.Arrays.sort(array, low, high + 1);
+                break;
+            }
+
+            int pi = partition(array, low, high);
+
+            // ordena a partição menor recursivamente e reutiliza loop para a maior
+            // (eliminação de cauda)
+            if (pi - 1 - low < high - (pi + 1)) {
+                quickSortIntro(array, low, pi - 1, depthLimit - 1);
+                low = pi + 1;
+            } else {
+                quickSortIntro(array, pi + 1, high, depthLimit - 1);
+                high = pi - 1;
+            }
+        }
+    }
+
+    private void insertionSortRange(int[] array, int left, int right) {
+        for (int i = left + 1; i <= right; i++) {
+            int key = array[i];
+            int j = i - 1;
+            while (j >= left && array[j] > key) {
+                array[j + 1] = array[j];
+                j--;
+            }
+            array[j + 1] = key;
+        }
     }
 
     private void quickSortSlide(int[] array, int low, int high) {
@@ -33,7 +74,7 @@ public class QuickSort implements AlgoritmosOrdenacao.OrdenacaoAlgorithm {
 
     public void sortComShuffle(int[] array) {
         AlgoritmosOrdenacao.shuffle(array);
-        quickSortSlide(array, 0, array.length - 1);
+        sort(array);
     }
 
     // (Dual-Pivot QuickSort)
@@ -57,12 +98,17 @@ public class QuickSort implements AlgoritmosOrdenacao.OrdenacaoAlgorithm {
     private int partitionMediana(int[] array, int low, int high) {
         // Mediana de três
         int mid = low + (high - low) / 2;
-        if (array[mid] < array[low]) swap(array, low, mid);
-        if (array[high] < array[low]) swap(array, low, high);
-        if (array[high] < array[mid]) swap(array, mid, high);
+        if (array[mid] < array[low])
+            swap(array, low, mid);
+        if (array[high] < array[low])
+            swap(array, low, high);
+        if (array[high] < array[mid])
+            swap(array, mid, high);
 
         // Coloca mediana no penúltimo elemento
-        swap(array, mid, high - 1);
+        // Coloca mediana como pivot na posição high
+        swap(array, mid, high);
+        // Partição clássica com pivot em 'high'
         return partition(array, low, high);
     }
 
