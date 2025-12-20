@@ -11,8 +11,8 @@ public class AnalisadorPerformance {
     public static void analisarOrdenacaoInteiros() {
         System.out.println("\n=== ANÁLISE DE PERFORMANCE - ORDENAÇÃO (INTEIROS) ===");
 
-        int[] tamanhos = {20000, 100000, 500000};
-        String[] cenarios = {"Aleatório", "Ordenado", "Inverso", "Parcial (50%)"};
+        int[] tamanhos = { 20000, 100000, 500000 };
+        String[] cenarios = { "Aleatório", "Ordenado", "Inverso", "Parcial (50%)" };
 
         for (int tamanho : tamanhos) {
             System.out.println("\n" + "=".repeat(50));
@@ -22,26 +22,31 @@ public class AnalisadorPerformance {
             for (String cenario : cenarios) {
                 System.out.println("\n--- Cenário: " + cenario + " ---");
 
-                int[] dadosOriginais = switch(cenario) {
+                int[] dadosOriginais = switch (cenario) {
                     case "Aleatório" -> GeradorDados.gerarArrayInteiros(tamanho);
                     case "Ordenado" -> GeradorDados.gerarArrayOrdenado(tamanho);
                     case "Inverso" -> GeradorDados.gerarArrayInverso(tamanho);
                     case "Parcial (50%)" -> GeradorDados.gerarArrayParcialmenteOrdenado(tamanho, 0.5);
                     default -> new int[0];
                 };
+                try {
+                    testarAlgoritmoInt("BubbleSort (Slide)", dadosOriginais.clone(), "slide");
+                    testarAlgoritmoInt("BubbleSort (Otimizado)", dadosOriginais.clone(), "otimizado");
+                    testarAlgoritmoInt("SelectionSort (Slide)", dadosOriginais.clone(), "slide");
+                    testarAlgoritmoInt("SelectionSort (Estável)", dadosOriginais.clone(), "estavel");
+                    testarAlgoritmoInt("InsertionSort", dadosOriginais.clone(), "normal");
+                    testarAlgoritmoInt("MergeSort (Clássico)", dadosOriginais.clone(), "classico");
+                    testarAlgoritmoInt("QuickSort (Slide)", dadosOriginais.clone(), "slide");
+                    testarAlgoritmoInt("QuickSort (+Shuffle)", dadosOriginais.clone(), "shuffle");
+                    testarAlgoritmoInt("QuickSort (Mediana3)", dadosOriginais.clone(), "mediana");
+                    testarAlgoritmoInt("CountingSort", dadosOriginais.clone(), "normal");
 
-                testarAlgoritmoInt("BubbleSort (Slide)", dadosOriginais.clone(), "slide");
-                testarAlgoritmoInt("BubbleSort (Otimizado)", dadosOriginais.clone(), "otimizado");
-                testarAlgoritmoInt("SelectionSort (Slide)", dadosOriginais.clone(), "slide");
-                testarAlgoritmoInt("SelectionSort (Estável)", dadosOriginais.clone(), "estavel");
-                testarAlgoritmoInt("InsertionSort", dadosOriginais.clone(), "normal");
-                testarAlgoritmoInt("MergeSort (Clássico)", dadosOriginais.clone(), "classico");
-                testarAlgoritmoInt("QuickSort (Slide)", dadosOriginais.clone(), "slide");
-                testarAlgoritmoInt("QuickSort (+Shuffle)", dadosOriginais.clone(), "shuffle");
-                testarAlgoritmoInt("QuickSort (Mediana3)", dadosOriginais.clone(), "mediana");
-                testarAlgoritmoInt("CountingSort", dadosOriginais.clone(), "normal");
-
-                testarAlgoritmoJavaInt("Arrays.sort()", dadosOriginais.clone());
+                    testarAlgoritmoJavaInt("Arrays.sort()", dadosOriginais.clone());
+                } catch (Exception e) {
+                    System.err.println("Erro ao executar testes de ordenação (inteiros): " + e.getMessage());
+                    e.printStackTrace();
+                    continue;
+                }
             }
         }
     }
@@ -49,7 +54,7 @@ public class AnalisadorPerformance {
     public static void analisarOrdenacaoEstudantes() {
         System.out.println("\n=== ANÁLISE DE PERFORMANCE - ORDENAÇÃO (ESTUDANTES) ===");
 
-        int[] tamanhos = {20000, 100000, 500000};
+        int[] tamanhos = { 20000, 100000, 500000 };
 
         for (int tamanho : tamanhos) {
             System.out.println("\n" + "=".repeat(50));
@@ -59,27 +64,33 @@ public class AnalisadorPerformance {
             Estudante[] estudantes = GeradorDados.gerarEstudantes(tamanho);
 
             System.out.println("\n--- Vetor Aleatório ---");
-            testarAlgoritmoEstudante("BubbleSort", estudantes.clone(), "normal");
-            testarAlgoritmoEstudante("SelectionSort", estudantes.clone(), "normal");
-            testarAlgoritmoEstudante("InsertionSort", estudantes.clone(), "normal");
-            testarAlgoritmoEstudante("MergeSort", estudantes.clone(), "classico");
-            testarAlgoritmoEstudante("QuickSort", estudantes.clone(), "normal");
-            testarAlgoritmoEstudante("CountingSort", estudantes.clone(), "normal");
+            try {
+                testarAlgoritmoEstudante("BubbleSort", estudantes.clone(), "normal");
+                testarAlgoritmoEstudante("SelectionSort", estudantes.clone(), "normal");
+                testarAlgoritmoEstudante("InsertionSort", estudantes.clone(), "normal");
+                testarAlgoritmoEstudante("MergeSort", estudantes.clone(), "classico");
+                testarAlgoritmoEstudante("QuickSort", estudantes.clone(), "normal");
+                testarAlgoritmoEstudante("CountingSort", estudantes.clone(), "normal");
 
-            Arrays.sort(estudantes);
-            System.out.println("\n--- Vetor Ordenado ---");
-            testarAlgoritmoEstudante("BubbleSort (Otimizado)", estudantes.clone(), "otimizado");
-            testarAlgoritmoEstudante("InsertionSort", estudantes.clone(), "normal");
-            testarAlgoritmoEstudante("QuickSort", estudantes.clone(), "normal");
+                Arrays.sort(estudantes);
+                System.out.println("\n--- Vetor Ordenado ---");
+                testarAlgoritmoEstudante("BubbleSort (Otimizado)", estudantes.clone(), "otimizado");
+                testarAlgoritmoEstudante("InsertionSort", estudantes.clone(), "normal");
+                testarAlgoritmoEstudante("QuickSort", estudantes.clone(), "normal");
 
-            testarAlgoritmoJavaEstudante("Arrays.sort()", estudantes.clone());
+                testarAlgoritmoJavaEstudante("Arrays.sort()", estudantes.clone());
+            } catch (Exception e) {
+                System.err.println("Erro ao executar testes de ordenação (estudantes): " + e.getMessage());
+                e.printStackTrace();
+                continue;
+            }
         }
     }
 
     public static void analisarBusca() {
         System.out.println("\n=== ANÁLISE DE PERFORMANCE - BUSCA ===");
 
-        int[] tamanhos = {20000, 100000, 500000, 1000000};
+        int[] tamanhos = { 20000, 100000, 500000, 1000000 };
 
         for (int tamanho : tamanhos) {
             System.out.println("\n" + "=".repeat(50));
@@ -91,15 +102,21 @@ public class AnalisadorPerformance {
             int alvoInexistente = -1;
 
             System.out.println("\n--- Busca (elemento EXISTENTE) ---");
-            testarBuscaInt("Busca Linear Iterativa", array.clone(), alvo, "iterativa");
-            testarBuscaInt("Busca Linear Recursiva", array.clone(), alvo, "recursiva");
-            testarBuscaInt("Busca Linear Duas Pontas", array.clone(), alvo, "duaspontas");
-            testarBuscaInt("Busca Binária Iterativa", array.clone(), alvo, "iterativa");
-            testarBuscaInt("Busca Binária Recursiva", array.clone(), alvo, "recursiva");
+            try {
+                testarBuscaInt("Busca Linear Iterativa", array.clone(), alvo, "iterativa");
+                testarBuscaInt("Busca Linear Recursiva", array.clone(), alvo, "recursiva");
+                testarBuscaInt("Busca Linear Duas Pontas", array.clone(), alvo, "duaspontas");
+                testarBuscaInt("Busca Binária Iterativa", array.clone(), alvo, "iterativa");
+                testarBuscaInt("Busca Binária Recursiva", array.clone(), alvo, "recursiva");
 
-            System.out.println("\n--- Busca (elemento INEXISTENTE) ---");
-            testarBuscaInt("Busca Linear Iterativa", array.clone(), alvoInexistente, "iterativa");
-            testarBuscaInt("Busca Binária Iterativa", array.clone(), alvoInexistente, "iterativa");
+                System.out.println("\n--- Busca (elemento INEXISTENTE) ---");
+                testarBuscaInt("Busca Linear Iterativa", array.clone(), alvoInexistente, "iterativa");
+                testarBuscaInt("Busca Binária Iterativa", array.clone(), alvoInexistente, "iterativa");
+            } catch (Exception e) {
+                System.err.println("Erro ao executar testes de busca (inteiros): " + e.getMessage());
+                e.printStackTrace();
+                continue;
+            }
         }
 
         System.out.println("\n\n=== BUSCA EM VETOR DE ESTUDANTES ===");
@@ -108,9 +125,14 @@ public class AnalisadorPerformance {
         Estudante alvoEstudante = estudantes[rand.nextInt(estudantes.length)];
 
         System.out.println("\n--- Estudantes (elemento EXISTENTE) ---");
-        testarBuscaEstudante("Busca Linear Iterativa", estudantes.clone(), alvoEstudante, "iterativa");
-        testarBuscaEstudante("Busca Binária Iterativa", estudantes.clone(), alvoEstudante, "iterativa");
-        testarBuscaEstudante("Busca Binária Recursiva", estudantes.clone(), alvoEstudante, "recursiva");
+        try {
+            testarBuscaEstudante("Busca Linear Iterativa", estudantes.clone(), alvoEstudante, "iterativa");
+            testarBuscaEstudante("Busca Binária Iterativa", estudantes.clone(), alvoEstudante, "iterativa");
+            testarBuscaEstudante("Busca Binária Recursiva", estudantes.clone(), alvoEstudante, "recursiva");
+        } catch (Exception e) {
+            System.err.println("Erro ao executar testes de busca (estudantes): " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private static void testarAlgoritmoInt(String nomeAlgoritmo, int[] dados, String versao) {
@@ -145,7 +167,7 @@ public class AnalisadorPerformance {
     }
 
     private static void executarAlgoritmoInt(int[] array, String algoritmo, String versao) {
-        switch(algoritmo) {
+        switch (algoritmo) {
             case "BubbleSort (Slide)" -> new BubbleSort().sort(array);
             case "BubbleSort (Otimizado)" -> new BubbleSort().sortOtimizado(array);
             case "SelectionSort (Slide)" -> new SelectionSort().sort(array);
@@ -195,7 +217,7 @@ public class AnalisadorPerformance {
     }
 
     private static void executarAlgoritmoEstudante(Estudante[] array, String algoritmo, String versao) {
-        switch(algoritmo) {
+        switch (algoritmo) {
             case "BubbleSort" -> new BubbleSort().sort(array);
             case "BubbleSort (Otimizado)" -> new BubbleSort().sortOtimizado(array);
             case "SelectionSort" -> new SelectionSort().sort(array);
@@ -222,7 +244,7 @@ public class AnalisadorPerformance {
         int resultado = -1;
 
         for (int i = 0; i < 1000; i++) {
-            switch(nomeAlgoritmo) {
+            switch (nomeAlgoritmo) {
                 case "Busca Linear Iterativa" -> resultado = buscaLinear.buscar(array, alvo);
                 case "Busca Linear Recursiva" -> resultado = buscaLinear.buscarRecursiva(array, alvo);
                 case "Busca Linear Duas Pontas" -> resultado = buscaLinear.buscarDuasPontas(array, alvo);
@@ -245,7 +267,7 @@ public class AnalisadorPerformance {
         int resultado = -1;
 
         for (int i = 0; i < 1000; i++) {
-            switch(nomeAlgoritmo) {
+            switch (nomeAlgoritmo) {
                 case "Busca Linear Iterativa" -> resultado = buscaLinear.buscar(array, alvo);
                 case "Busca Binária Iterativa" -> resultado = buscaBinaria.buscar(array, alvo);
                 case "Busca Binária Recursiva" -> resultado = buscaBinaria.buscarRecursiva(array, alvo);

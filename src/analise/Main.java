@@ -51,7 +51,8 @@ public class Main {
 
         int escolha = scanner.nextInt();
 
-        if (escolha == 8) return;
+        if (escolha == 8)
+            return;
 
         System.out.print("\nTamanho do array: ");
         int tamanho = scanner.nextInt();
@@ -84,14 +85,34 @@ public class Main {
         System.out.print("\nEscolha: ");
 
         int escolha = scanner.nextInt();
-        if (escolha == 7) return;
+        if (escolha == 7)
+            return;
 
         System.out.print("\nTamanho do array: ");
         int tamanho = scanner.nextInt();
 
         int[] array = GeradorDados.gerarArrayOrdenado(tamanho);
-        System.out.print("Valor para buscar: ");
-        int alvo = scanner.nextInt();
+        if (array.length == 0) {
+            System.err.println("Array gerado vazio. Verifique o tamanho informado.");
+            return;
+        }
+
+        System.out.println("\nEscolha modo de seleção do alvo:");
+
+        System.out.println("1. Digitar valor para buscar");
+        System.out.println("2. Usar valor existente aleatório do array (Recomendado para testes)");
+        System.out.print("Escolha: ");
+        int modoAlvo = scanner.nextInt();
+
+        int alvo;
+        if (modoAlvo == 2) {
+            java.util.Random rnd = new java.util.Random();
+            alvo = array[rnd.nextInt(array.length)];
+            System.out.println("Alvo selecionado aleatoriamente (existe no array): " + alvo);
+        } else {
+            System.out.print("Valor para buscar: ");
+            alvo = scanner.nextInt();
+        }
 
         if (escolha >= 1 && escolha <= 5) {
             testarBuscaIndividual(escolha, array, alvo);
@@ -103,7 +124,7 @@ public class Main {
     private static void testarAlgoritmoIndividual(int algoritmo, int tamanho, int tipo) {
         int[] array = gerarArray(tamanho, tipo);
 
-        String tipoArray = switch(tipo) {
+        String tipoArray = switch (tipo) {
             case 1 -> "Aleatório";
             case 2 -> "Ordenado";
             case 3 -> "Inverso";
@@ -122,31 +143,37 @@ public class Main {
 
         long inicio = System.nanoTime();
 
-        switch(algoritmo) {
-            case 1 -> {
-                System.out.println("\nExecutando Bubble Sort...");
-                new BubbleSort().sort(array);
+        try {
+            switch (algoritmo) {
+                case 1 -> {
+                    System.out.println("\nExecutando Bubble Sort...");
+                    new BubbleSort().sort(array);
+                }
+                case 2 -> {
+                    System.out.println("\nExecutando Selection Sort...");
+                    new SelectionSort().sort(array);
+                }
+                case 3 -> {
+                    System.out.println("\nExecutando Insertion Sort...");
+                    new InsertionSort().sort(array);
+                }
+                case 4 -> {
+                    System.out.println("\nExecutando Merge Sort...");
+                    new MergeSort().sort(array);
+                }
+                case 5 -> {
+                    System.out.println("\nExecutando Quick Sort...");
+                    new QuickSort().sort(array);
+                }
+                case 6 -> {
+                    System.out.println("\nExecutando Counting Sort...");
+                    new CountingSort().sort(array);
+                }
             }
-            case 2 -> {
-                System.out.println("\nExecutando Selection Sort...");
-                new SelectionSort().sort(array);
-            }
-            case 3 -> {
-                System.out.println("\nExecutando Insertion Sort...");
-                new InsertionSort().sort(array);
-            }
-            case 4 -> {
-                System.out.println("\nExecutando Merge Sort...");
-                new MergeSort().sort(array);
-            }
-            case 5 -> {
-                System.out.println("\nExecutando Quick Sort...");
-                new QuickSort().sort(array);
-            }
-            case 6 -> {
-                System.out.println("\nExecutando Counting Sort...");
-                new CountingSort().sort(array);
-            }
+        } catch (Exception e) {
+            System.err.println("Erro ao executar algoritmo de ordenação: " + e.getMessage());
+            e.printStackTrace();
+            return;
         }
 
         long fim = System.nanoTime();
@@ -168,7 +195,7 @@ public class Main {
     private static void testarTodosOrdenacao(int tamanho, int tipo) {
         int[] arrayOriginal = gerarArray(tamanho, tipo);
 
-        String tipoArray = switch(tipo) {
+        String tipoArray = switch (tipo) {
             case 1 -> "Aleatório";
             case 2 -> "Ordenado";
             case 3 -> "Inverso";
@@ -186,8 +213,10 @@ public class Main {
             int min = arrayOriginal[0];
             int max = arrayOriginal[0];
             for (int num : arrayOriginal) {
-                if (num < min) min = num;
-                if (num > max) max = num;
+                if (num < min)
+                    min = num;
+                if (num > max)
+                    max = num;
             }
             System.out.println("Valores no array: de " + min + " a " + max);
         }
@@ -215,13 +244,18 @@ public class Main {
             int[] array = arrayOriginal.clone();
             long inicio = System.nanoTime();
 
-            switch(algoritmo) {
-                case "Bubble Sort" -> new BubbleSort().sort(array);
-                case "Selection Sort" -> new SelectionSort().sort(array);
-                case "Insertion Sort" -> new InsertionSort().sort(array);
-                case "Merge Sort" -> new MergeSort().sort(array);
-                case "Quick Sort" -> new QuickSort().sort(array);
-                case "Counting Sort" -> new CountingSort().sort(array);
+            try {
+                switch (algoritmo) {
+                    case "Bubble Sort" -> new BubbleSort().sort(array);
+                    case "Selection Sort" -> new SelectionSort().sort(array);
+                    case "Insertion Sort" -> new InsertionSort().sort(array);
+                    case "Merge Sort" -> new MergeSort().sort(array);
+                    case "Quick Sort" -> new QuickSort().sort(array);
+                    case "Counting Sort" -> new CountingSort().sort(array);
+                }
+            } catch (Exception e) {
+                System.err.println("Erro ao executar " + algoritmo + ": " + e.getMessage());
+                e.printStackTrace();
             }
 
             long fim = System.nanoTime();
@@ -259,6 +293,10 @@ public class Main {
     }
 
     private static void testarBuscaIndividual(int algoritmo, int[] array, int alvo) {
+        if (array == null) {
+            System.err.println("array nulo recebido em testarBuscaIndividual");
+            return;
+        }
         BuscaLinear buscaLinear = new BuscaLinear();
         BuscaBinaria buscaBinaria = new BuscaBinaria();
 
@@ -275,12 +313,17 @@ public class Main {
         long inicio = System.nanoTime();
         int resultado = -1;
 
-        switch(algoritmo) {
-            case 1 -> resultado = buscaLinear.buscar(array, alvo);
-            case 2 -> resultado = buscaLinear.buscarRecursiva(array, alvo);
-            case 3 -> resultado = buscaLinear.buscarDuasPontas(array, alvo);
-            case 4 -> resultado = buscaBinaria.buscar(array, alvo);
-            case 5 -> resultado = buscaBinaria.buscarRecursiva(array, alvo);
+        try {
+            switch (algoritmo) {
+                case 1 -> resultado = buscaLinear.buscar(array, alvo);
+                case 2 -> resultado = buscaLinear.buscarRecursiva(array, alvo);
+                case 3 -> resultado = buscaLinear.buscarDuasPontas(array, alvo);
+                case 4 -> resultado = buscaBinaria.buscar(array, alvo);
+                case 5 -> resultado = buscaBinaria.buscarRecursiva(array, alvo);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao executar busca: " + e.getMessage());
+            e.printStackTrace();
         }
 
         long fim = System.nanoTime();
@@ -297,6 +340,10 @@ public class Main {
     }
 
     private static void testarTodasBuscas(int[] array, int alvo) {
+        if (array == null) {
+            System.err.println("array nulo recebido em testarTodasBuscas");
+            return;
+        }
         BuscaLinear buscaLinear = new BuscaLinear();
         BuscaBinaria buscaBinaria = new BuscaBinaria();
 
@@ -326,12 +373,17 @@ public class Main {
             long inicio = System.nanoTime();
             int resultado = -1;
 
-            switch(algoritmo) {
-                case "Busca Linear Iterativa" -> resultado = buscaLinear.buscar(array, alvo);
-                case "Busca Linear Recursiva" -> resultado = buscaLinear.buscarRecursiva(array, alvo);
-                case "Busca Linear Duas Pontas" -> resultado = buscaLinear.buscarDuasPontas(array, alvo);
-                case "Busca Binária Iterativa" -> resultado = buscaBinaria.buscar(array, alvo);
-                case "Busca Binária Recursiva" -> resultado = buscaBinaria.buscarRecursiva(array, alvo);
+            try {
+                switch (algoritmo) {
+                    case "Busca Linear Iterativa" -> resultado = buscaLinear.buscar(array, alvo);
+                    case "Busca Linear Recursiva" -> resultado = buscaLinear.buscarRecursiva(array, alvo);
+                    case "Busca Linear Duas Pontas" -> resultado = buscaLinear.buscarDuasPontas(array, alvo);
+                    case "Busca Binária Iterativa" -> resultado = buscaBinaria.buscar(array, alvo);
+                    case "Busca Binária Recursiva" -> resultado = buscaBinaria.buscarRecursiva(array, alvo);
+                }
+            } catch (Exception e) {
+                System.err.println("Erro ao executar " + algoritmo + ": " + e.getMessage());
+                e.printStackTrace();
             }
 
             long fim = System.nanoTime();
@@ -347,7 +399,7 @@ public class Main {
     }
 
     private static int[] gerarArray(int tamanho, int tipo) {
-        return switch(tipo) {
+        return switch (tipo) {
             case 1 -> GeradorDados.gerarArrayInteiros(tamanho);
             case 2 -> GeradorDados.gerarArrayOrdenado(tamanho);
             case 3 -> GeradorDados.gerarArrayInverso(tamanho);
@@ -370,7 +422,7 @@ public class Main {
     }
 
     private static String getNomeAlgoritmo(int codigo) {
-        return switch(codigo) {
+        return switch (codigo) {
             case 1 -> "Bubble Sort";
             case 2 -> "Selection Sort";
             case 3 -> "Insertion Sort";
@@ -382,7 +434,7 @@ public class Main {
     }
 
     private static String getNomeBusca(int codigo) {
-        return switch(codigo) {
+        return switch (codigo) {
             case 1 -> "Busca Linear Iterativa";
             case 2 -> "Busca Linear Recursiva";
             case 3 -> "Busca Linear Duas Pontas";

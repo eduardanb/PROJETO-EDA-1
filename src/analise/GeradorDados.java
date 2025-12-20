@@ -2,6 +2,7 @@ package analise;
 
 import models.Estudante;
 import java.util.Random;
+import java.util.Arrays;
 
 public class GeradorDados {
     private static final String[] NOMES = {
@@ -20,6 +21,8 @@ public class GeradorDados {
     private static Random rand = new Random();
 
     public static Estudante[] gerarEstudantes(int tamanho) {
+        if (tamanho < 0)
+            throw new IllegalArgumentException("tamanho não pode ser negativo");
         Estudante[] estudantes = new Estudante[tamanho];
         for (int i = 0; i < tamanho; i++) {
             int matricula = 10000 + i;
@@ -32,6 +35,8 @@ public class GeradorDados {
     }
 
     public static int[] gerarArrayInteiros(int tamanho) {
+        if (tamanho < 0)
+            throw new IllegalArgumentException("tamanho não pode ser negativo");
         int[] array = new int[tamanho];
         for (int i = 0; i < tamanho; i++) {
             array[i] = rand.nextInt(10000);
@@ -40,25 +45,36 @@ public class GeradorDados {
     }
 
     public static int[] gerarArrayOrdenado(int tamanho) {
-        int[] array = new int[tamanho];
-        for (int i = 0; i < tamanho; i++) {
-            array[i] = i * 10;
-        }
+        if (tamanho < 0)
+            throw new IllegalArgumentException("tamanho não pode ser negativo");
+        int[] array = gerarArrayInteiros(tamanho);
+        Arrays.sort(array);
         return array;
     }
 
     public static int[] gerarArrayInverso(int tamanho) {
-        int[] array = new int[tamanho];
-        for (int i = 0; i < tamanho; i++) {
-            array[i] = (tamanho - i) * 10;
+        if (tamanho < 0)
+            throw new IllegalArgumentException("tamanho não pode ser negativo");
+        int[] array = gerarArrayInteiros(tamanho);
+        Arrays.sort(array);
+        // inverter
+        for (int i = 0; i < array.length / 2; i++) {
+            int j = array.length - 1 - i;
+            int tmp = array[i];
+            array[i] = array[j];
+            array[j] = tmp;
         }
         return array;
     }
 
     public static int[] gerarArrayParcialmenteOrdenado(int tamanho, double percentual) {
+        if (tamanho < 0)
+            throw new IllegalArgumentException("tamanho não pode ser negativo");
+        if (percentual < 0.0 || percentual > 1.0)
+            throw new IllegalArgumentException("percentual deve estar entre 0.0 e 1.0");
         int[] array = gerarArrayOrdenado(tamanho);
         // Embaralhar parcialmente
-        int embaralhar = (int)(tamanho * percentual);
+        int embaralhar = (int) (tamanho * percentual);
         for (int i = 0; i < embaralhar; i++) {
             int a = rand.nextInt(tamanho);
             int b = rand.nextInt(tamanho);
@@ -70,6 +86,8 @@ public class GeradorDados {
     }
 
     public static Estudante[] gerarEstudantesOrdenados(int tamanho) {
+        if (tamanho < 0)
+            throw new IllegalArgumentException("tamanho não pode ser negativo");
         Estudante[] estudantes = gerarEstudantes(tamanho);
         java.util.Arrays.sort(estudantes);
         return estudantes;

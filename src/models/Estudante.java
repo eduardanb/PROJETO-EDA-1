@@ -6,14 +6,28 @@ public class Estudante implements Comparable<Estudante> {
     private int nota;
 
     public Estudante(int matricula, String nome, int nota) {
+        if (nome == null)
+            throw new IllegalArgumentException("nome não pode ser nulo");
+        if (matricula < 0)
+            throw new IllegalArgumentException("matrícula não pode ser negativa");
+        if (nota < 0 || nota > 10)
+            throw new IllegalArgumentException("nota deve estar entre 0 e 10");
         this.matricula = matricula;
         this.nome = nome;
         this.nota = nota;
     }
 
-    public int getMatricula() { return matricula; }
-    public String getNome() { return nome; }
-    public int getNota() { return nota; }
+    public int getMatricula() {
+        return matricula;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getNota() {
+        return nota;
+    }
 
     @Override
     public int compareTo(Estudante outro) {
@@ -38,8 +52,10 @@ public class Estudante implements Comparable<Estudante> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
         Estudante estudante = (Estudante) obj;
         return matricula == estudante.matricula;
     }

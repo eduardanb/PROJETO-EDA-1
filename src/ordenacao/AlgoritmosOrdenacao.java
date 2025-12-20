@@ -5,10 +5,13 @@ import models.Estudante;
 public class AlgoritmosOrdenacao {
     public interface OrdenacaoAlgorithm {
         void sort(int[] array);
+
         void sort(Estudante[] array);
     }
 
     public static void shuffle(int[] array) {
+        if (array == null)
+            throw new IllegalArgumentException("array não pode ser nulo");
         java.util.Random rand = new java.util.Random();
         for (int i = array.length - 1; i > 0; i--) {
             int j = rand.nextInt(i + 1);
@@ -19,15 +22,21 @@ public class AlgoritmosOrdenacao {
     }
 
     public static boolean isSorted(int[] array) {
+        if (array == null)
+            return false;
         for (int i = 0; i < array.length - 1; i++) {
-            if (array[i] > array[i + 1]) return false;
+            if (array[i] > array[i + 1])
+                return false;
         }
         return true;
     }
 
     public static boolean isSorted(Estudante[] array) {
+        if (array == null)
+            return false;
         for (int i = 0; i < array.length - 1; i++) {
-            if (array[i].compareTo(array[i + 1]) > 0) return false;
+            if (array[i].compareTo(array[i + 1]) > 0)
+                return false;
         }
         return true;
     }
